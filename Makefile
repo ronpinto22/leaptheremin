@@ -13,7 +13,7 @@ CC       = g++
 CFLAGS   = -O3 -Wall
 CFLAGS  += -I$(INCLUDE)
 DEFS	= -D__UNIX_JACK__ -D__LITTLE_ENDIAN__
-LIBRARY = -lstk -lm -lpthread -lLeap
+LIBRARY = -lstk -lrtaudio -lLeap
 
 %.o : $(SRC_PATH)/%.cpp
 	$(CC) $(CFLAGS) $(DEFS) -c $(<) -o $(OBJECT_PATH)/$@

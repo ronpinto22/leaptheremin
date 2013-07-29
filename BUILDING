@@ -1,0 +1,13 @@
+Requirements:
+
+* LeapMotion SDK 0.8
+* STK 4.4.4
+
+Audio for this application works on top of The Synthesis ToolKit (STK)
+STK supports many OS's and audio libraries.
+
+This application was tested with Ubuntu 13.04 with Jack installed.
+Since Jack is not a friend of PulseAudio, you will need to disable PulseAudio or use a second sound card, and have jackd daemon running.
+
+You should be able to compile this app in Windows and Mac. It is not tested on those environments.
+

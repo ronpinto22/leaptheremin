@@ -1,19 +1,31 @@
-/******************************************************************************\
-* Copyright (C) 2012-2013 Leap Motion, Inc. All rights reserved.               *
-* Leap Motion proprietary and confidential. Not for distribution.              *
-* Use subject to the terms of the Leap Motion SDK Agreement available at       *
-* https://developer.leapmotion.com/sdk_agreement, or another agreement         *
-* between Leap Motion and you, your company or other organization.             *
-\******************************************************************************/
-
+/*****************************************************************************\
+ * This file is part of LeapTheremin.                                        *
+ *                                                                           *
+ * LeapTheremin is free software: you can redistribute it and/or modify      *
+ * it under the terms of the GNU General Public License as published by      *
+ * the Free Software Foundation, either version 3 of the License, or         *
+ * (at your option) any later version.                                       *
+ *                                                                           *
+ * LeapTheremin is distributed in the hope that it will be useful,           *
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of            *
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the             *
+ * GNU General Public License for more details.                              *
+ *                                                                           *
+ * You should have received a copy of the GNU General Public License         *
+ * along with LeapTheremin.  If not, see <http://www.gnu.org/licenses/>.     *
+\*****************************************************************************/
 #include <iostream>
-#include <pthread.h>
+#include <unistd.h>
 #include "Leap.h"
 #include "StkAudio.h"
 
-#define FLOOR 200
-#define FREQ_M 6
-#define VOLUME_M 0.0025
+//This constants will modify controller behavior
+//FLOOR sets the base height to measure volume. Defaults to 100 milimeters
+//FREQ_M sets frequence multiplier. Higher values will increase theremin's sensitivity
+//VOLUME_M sets volume multipliyer. Have in mind that valid volume range goes from 0.0 to 1.0 
+#define FLOOR 100
+#define FREQ_M 4
+#define VOLUME_M 0.0035
 
 using namespace Leap;
 
@@ -83,13 +95,13 @@ void ThereminController::onFrame(const Controller& controller) {
     const Hand vHand = frame.hands().leftmost();
     const Hand pHand = frame.hands().rightmost();
 
-    freq=(pHand.palmPosition().x)*FREQ_M;
+    freq=(pHand.palmPosition().x)*FREQ_M+200;
     volume=(vHand.palmPosition().y-FLOOR)*VOLUME_M;
     if(volume<0) volume=0;
     else if(volume>1) volume=1;
     if(freq<0) freq=0;
-
-    //std::cout << "Frequency: " << freq << ", Volume: " << volume << std::endl;
+    play();
+    std::cout << "Frequency: " << freq << ", Volume: " << volume << std::endl;
   }
 }
 
@@ -102,34 +114,21 @@ void ThereminController::onFocusLost(const Controller& controller) {
 }
 
 ThereminController listener;
-float flag=1;
-
-void* audioThread(void *v){
-  while(flag)
-    listener.play();
-  pthread_exit(0);
-}
 
 int main() {
-  // Create a sample listener and controller
 
   StkAudio stkaudio;
   Controller controller;
-  pthread_t audio;
-  //Stk::setSampleRate( 44100.0 );
-  //Stk::showWarnings( true );
   stkaudio.initializeAudio();
   listener.setAudio(&stkaudio);
 
   // Have the sample listener receive events from the controller
   controller.addListener(listener);
-  pthread_create(&audio,NULL,audioThread,NULL);
 
   // Keep this process running until Enter is pressed
   std::cout << "Press Enter to quit..." << std::endl;
   std::cin.get();
-  flag=0;
-  pthread_join(audio,NULL);
+
   // Remove the sample listener when done
   controller.removeListener(listener);
 
