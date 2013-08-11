@@ -12,15 +12,13 @@ vpath %.h $(INCLUDE)
 CC       = g++
 CFLAGS   = -O3 -Wall
 CFLAGS  += -I$(INCLUDE)
-DEFS	= -D__UNIX_JACK__ -D__LITTLE_ENDIAN__
-LIBRARY = -lstk -lrtaudio -lLeap
+DEFS	= -D__LINUX_ALSA__ -D__LITTLE_ENDIAN__
+LIBRARY = -lcsound64 -lLeap
 
 %.o : $(SRC_PATH)/%.cpp
 	$(CC) $(CFLAGS) $(DEFS) -c $(<) -o $(OBJECT_PATH)/$@
 
 all : $(PROGRAMS)
-
-$(OBJECTS) : Stk.h
 
 clean : 
 	$(RM) -f $(PROGRAMS) *.exe
@@ -32,5 +30,5 @@ distclean: clean
 strip : 
 	strip $(PROGRAMS)
 
-theremin: theremin.cpp StkAudio.cpp
-	$(CC) $(LDFLAGS) $(CFLAGS) $(DEFS) -o theremin theremin.cpp StkAudio.cpp $(LIBRARY)
+theremin: theremin.cpp CsAudio.cpp
+	$(CC) $(LDFLAGS) $(CFLAGS) $(DEFS) -o theremin theremin.cpp CsAudio.cpp $(LIBRARY)

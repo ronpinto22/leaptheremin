@@ -17,23 +17,23 @@
 #include <iostream>
 #include <unistd.h>
 #include "Leap.h"
-#include "StkAudio.h"
+#include "CsAudio.h"
 
 //This constants will modify controller behavior
 //FLOOR sets the base height to measure volume. Defaults to 100 milimeters
 //FREQ_M sets frequence multiplier. Higher values will increase theremin's sensitivity
 //VOLUME_M sets volume multipliyer. Have in mind that valid volume range goes from 0.0 to 1.0 
-#define FLOOR 100
-#define FREQ_M 4
-#define VOLUME_M 0.0035
+#define THMN_FLOOR 100
+#define THMN_FREQ_M 1.2
+#define THMN_VOLUME_M 0.0035
 
 using namespace Leap;
 
 class ThereminController : public Listener {
   private:
-    StkAudio* audio;
-    float freq;
-    float volume;
+    AudioLib* audio;
+    double freq;
+    double volume;
   public:
     virtual void onInit(const Controller&);
     virtual void onConnect(const Controller&);
@@ -42,7 +42,7 @@ class ThereminController : public Listener {
     virtual void onFrame(const Controller&);
     virtual void onFocusGained(const Controller&);
     virtual void onFocusLost(const Controller&);
-    void setAudio(StkAudio* audio);
+    void setAudio(AudioLib* audio);
     ThereminController();
     void play();
 };
@@ -53,7 +53,7 @@ ThereminController::ThereminController() : Listener() {
   audio=NULL;
 }
 
-void ThereminController::setAudio(StkAudio* audio) {
+void ThereminController::setAudio(AudioLib* audio) {
   this->audio=audio;
 }
 
@@ -95,13 +95,40 @@ void ThereminController::onFrame(const Controller& controller) {
     const Hand vHand = frame.hands().leftmost();
     const Hand pHand = frame.hands().rightmost();
 
-    freq=(pHand.palmPosition().x)*FREQ_M+200;
-    volume=(vHand.palmPosition().y-FLOOR)*VOLUME_M;
-    if(volume<0) volume=0;
-    else if(volume>1) volume=1;
-    if(freq<0) freq=0;
-    play();
-    std::cout << "Frequency: " << freq << ", Volume: " << volume << std::endl;
+    //freq=(pHand.palmPosition().x)*THMN_FREQ_M-200;
+    volume=(vHand.palmPosition().y-THMN_FLOOR)*THMN_VOLUME_M;
+
+    double x=0,y=0,z=0;
+    x=pHand.palmPosition().x;
+    y=(pHand.palmPosition().y-200)/5;
+    z=0;//abs(pHand.palmPosition().z);
+    /*int fingerCount;
+    
+    
+    fingerCount=pHand.pointables().count();
+    if(fingerCount){
+	    for(int i=0; i<fingerCount;i++){
+	    	x+=abs(pHand.pointables()[i].tipPosition().x);
+	    	y+=abs(pHand.pointables()[i].tipPosition().y);
+	    	z+=abs(pHand.pointables()[i].tipPosition().z);	
+	    }
+	    x=x/fingerCount;
+	    y=y/fingerCount-THMN_FLOOR;
+	    z=z/fingerCount;
+
+	    std::cout << "X: " << x << " Y: " << y << " Z: " << z << std::endl;
+
+
+	    volume=(vHand.palmPosition().y-THMN_FLOOR)*THMN_VOLUME_M;*/
+	    
+	    //freq=(x+y+z)*THMN_FREQ_M;
+	    freq=x*y;
+	    if(volume<0) volume=0;
+	    else if(volume>1) volume=1;
+	    if(freq<0) freq=0;
+	    play();
+	    std::cout << "Frequency: " << freq << ", Volume: " << volume << std::endl;
+    //}
   }
 }
 
@@ -115,12 +142,12 @@ void ThereminController::onFocusLost(const Controller& controller) {
 
 ThereminController listener;
 
-int main() {
+int main(int argc,char** argv) {
 
-  StkAudio stkaudio;
+  CsAudio audio;
   Controller controller;
-  stkaudio.initializeAudio();
-  listener.setAudio(&stkaudio);
+  audio.initializeAudio(argc,argv);
+  listener.setAudio(&audio);
 
   // Have the sample listener receive events from the controller
   controller.addListener(listener);

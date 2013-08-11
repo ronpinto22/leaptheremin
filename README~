@@ -17,15 +17,6 @@
     Germań.
 
     ====================================================================
-    Executing:
-
-    STK version is executed simply by cmdline:
-    ./theremin	
-
-    CSound version requires a .csd file for instrument definition.
-    ./theremin oscils.csd
-
-    ====================================================================
 
     Licensing note:
 
