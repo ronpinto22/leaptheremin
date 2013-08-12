@@ -5,7 +5,7 @@ vpath %.o $(OBJECT_PATH)
 
 INCLUDE = 
 ifeq ($(strip $(INCLUDE)), )
-	INCLUDE = /usr/include/stk
+	INCLUDE = /usr/include/csound
 endif
 vpath %.h $(INCLUDE)
 
@@ -13,7 +13,7 @@ CC       = g++
 CFLAGS   = -O3 -Wall
 CFLAGS  += -I$(INCLUDE)
 DEFS	= -D__LINUX_ALSA__ -D__LITTLE_ENDIAN__
-LIBRARY = -lcsound64 -lLeap
+LIBRARY = -Llib/linux -lcsound64 -lLeap
 
 %.o : $(SRC_PATH)/%.cpp
 	$(CC) $(CFLAGS) $(DEFS) -c $(<) -o $(OBJECT_PATH)/$@

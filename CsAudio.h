@@ -17,11 +17,9 @@
 
 #ifndef THEREMIN_CSAUDIO_H
 #define THEREMIN_CSAUDIO_H
-
 #define  USE_DOUBLE 
-#include <unistd.h>
 #include <stdio.h> 
-#include <csound/csound.h>
+#include <csound.h>
 #include <cstdlib>
 #include "audiolib.h"
 

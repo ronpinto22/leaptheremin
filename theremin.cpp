@@ -15,7 +15,6 @@
  * along with LeapTheremin.  If not, see <http://www.gnu.org/licenses/>.     *
 \*****************************************************************************/
 #include <iostream>
-#include <unistd.h>
 #include "Leap.h"
 #include "CsAudio.h"
 
