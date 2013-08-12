@@ -1,8 +1,0 @@
-Requirements:
-
-* LeapMotion SDK 0.8
-* Csound 5 or STK 4.4.4
-
-This application was tested with Ubuntu 13.04.
-You should be able to compile this app in Windows and Mac. It is not tested on those environments.
-
