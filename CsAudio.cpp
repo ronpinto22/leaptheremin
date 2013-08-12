@@ -55,14 +55,22 @@ int CsAudio::initializeAudio(int argc,char** argv) {
 
 	if(csoundGetChannelPtr(ud.csound,&pvalue, "pitch", CSOUND_INPUT_CHANNEL | CSOUND_CONTROL_CHANNEL)!=0) printf("\nError getting control channel");
 	if(csoundGetChannelPtr(ud.csound,&vvalue, "volume", CSOUND_INPUT_CHANNEL | CSOUND_CONTROL_CHANNEL)!=0) printf("\nError getting control channel");
+	if(csoundGetChannelPtr(ud.csound,&wvalue, "waveshape", CSOUND_INPUT_CHANNEL | CSOUND_CONTROL_CHANNEL)!=0) printf("\nError getting control channel");
+
 	*pvalue=(MYFLT)0.0;	
 	*vvalue=(MYFLT)0.0;
+	*wvalue=(MYFLT)5;
 	return 1; 
 } 
 
 int CsAudio::play(double pitch,double volume){
 	*pvalue=(MYFLT)pitch;
 	*vvalue=(MYFLT)volume;
+	return 1;
+}
+
+int CsAudio::setSound(int waveshape){
+	*wvalue=(MYFLT)waveshape;
 	return 1;
 }
 

@@ -24,8 +24,8 @@
 //FREQ_M sets frequence multiplier. Higher values will increase theremin's sensitivity
 //VOLUME_M sets volume multipliyer. Have in mind that valid volume range goes from 0.0 to 1.0 
 #define THMN_FLOOR 100
-#define THMN_FREQ_M 1.2
-#define THMN_VOLUME_M 0.0035
+#define THMN_FREQ_M 0.6
+#define THMN_VOLUME_M 100
 
 using namespace Leap;
 
@@ -100,7 +100,7 @@ void ThereminController::onFrame(const Controller& controller) {
 
     double x=0,y=0,z=0;
     x=pHand.palmPosition().x;
-    y=(pHand.palmPosition().y-200)/5;
+    y=(pHand.palmPosition().y-THMN_FLOOR);
     z=0;//abs(pHand.palmPosition().z);
     /*int fingerCount;
     
@@ -121,13 +121,12 @@ void ThereminController::onFrame(const Controller& controller) {
 
 	    volume=(vHand.palmPosition().y-THMN_FLOOR)*THMN_VOLUME_M;*/
 	    
-	    //freq=(x+y+z)*THMN_FREQ_M;
-	    freq=x*y;
+	    freq=(x+y+z)*THMN_FREQ_M;
 	    if(volume<0) volume=0;
-	    else if(volume>1) volume=1;
+	    //else if(volume>1) volume=1;
 	    if(freq<0) freq=0;
 	    play();
-	    std::cout << "Frequency: " << freq << ", Volume: " << volume << std::endl;
+	    //std::cout << "Frequency: " << freq << ", Volume: " << volume << std::endl;
     //}
   }
 }
@@ -153,7 +152,7 @@ int main(int argc,char** argv) {
   controller.addListener(listener);
 
   // Keep this process running until Enter is pressed
-  std::cout << "Press Enter to quit..." << std::endl;
+  std::cout << "Press any key to exit... " << std::endl;
   std::cin.get();
 
   // Remove the sample listener when done

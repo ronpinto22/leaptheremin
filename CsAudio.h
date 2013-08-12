@@ -37,10 +37,12 @@ class CsAudio : public AudioLib {
 	t_userdata ud;
 	MYFLT* pvalue;
 	MYFLT* vvalue;
+	MYFLT* wvalue;
 	void* ThreadID; 
   public:
     int initializeAudio(int argc,char**argv);
     int play(double freq, double volume);
+    int setSound(int waveshape);
     void destroy();
     ~CsAudio();
 };
