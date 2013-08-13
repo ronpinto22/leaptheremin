@@ -23,22 +23,6 @@ uintptr_t csThread(void *data);
 
 int CsAudio::initializeAudio(int argc,char** argv) { 
 
-	//int finish;
-
-	/*char filename[11];
-	const char* p=CSD_FILE;
-	for(int i=0;(filename[i]=p[i]);i++);
-
-	argv[0]=filename;
-	argv[1]=filename;*/
-
-	/*finish=csoundInitialize(&argc, &argv, 0);  
-
-	if(finish<0){
-		printf("\nError initializing CSOUND");		
-		exit(0);
-	}*/
-
 	ud.csound=csoundCreate(NULL);  
 	if(ud.csound == NULL){
 		printf("\nError creating CSOUND");
@@ -76,7 +60,6 @@ int CsAudio::setSound(int waveshape){
 
 void CsAudio::destroy(){
 	ud.PERF_STATUS=0;
-	csoundDestroy(ud.csound);
 }
 
 CsAudio::~CsAudio(){
