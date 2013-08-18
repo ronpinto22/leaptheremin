@@ -17,14 +17,16 @@
 #include <iostream>
 #include "Leap.h"
 #include "CsAudio.h"
+#include "notas.h"
 
 //This constants will modify controller behavior
 //FLOOR sets the base height to measure volume. Defaults to 100 milimeters
 //FREQ_M sets frequence multiplier. Higher values will increase theremin's sensitivity
 //VOLUME_M sets volume multipliyer. Have in mind that valid volume range goes from 0.0 to 1.0 
 #define THMN_FLOOR 100
-#define THMN_FREQ_M 0.6
-#define THMN_VOLUME_M 100
+#define THMN_FREQ_M_X 0.2
+#define THMN_FREQ_M_Y 0.05
+#define THMN_VOLUME_M 500
 
 using namespace Leap;
 
@@ -90,6 +92,7 @@ void ThereminController::onFrame(const Controller& controller) {
   */
 
   if (frame.hands().count()>=2) {
+    Musica mu;
     // Get the first hand
     const Hand vHand = frame.hands().leftmost();
     const Hand pHand = frame.hands().rightmost();
@@ -99,7 +102,7 @@ void ThereminController::onFrame(const Controller& controller) {
 
     double x=0,y=0,z=0;
     x=pHand.palmPosition().x;
-    y=(pHand.palmPosition().y-THMN_FLOOR);
+    y=0;//(pHand.palmPosition().y-THMN_FLOOR);
     z=0;//abs(pHand.palmPosition().z);
     /*int fingerCount;
     
@@ -120,6 +123,7 @@ void ThereminController::onFrame(const Controller& controller) {
 
 	    volume=(vHand.palmPosition().y-THMN_FLOOR)*THMN_VOLUME_M;*/
 	    
+	    //freq=mu.normalizar((x+y+z)*THMN_FREQ_M);
 	    freq=(x+y+z)*THMN_FREQ_M;
 	    if(volume<0) volume=0;
 	    //else if(volume>1) volume=1;

@@ -30,5 +30,5 @@ distclean: clean
 strip : 
 	strip $(PROGRAMS)
 
-theremin: theremin.cpp CsAudio.cpp
-	$(CC) $(LDFLAGS) $(CFLAGS) $(DEFS) -o theremin theremin.cpp CsAudio.cpp $(LIBRARY)
+theremin: theremin.cpp CsAudio.cpp notas.cpp
+	$(CC) $(LDFLAGS) $(CFLAGS) $(DEFS) -o theremin theremin.cpp CsAudio.cpp notas.cpp $(LIBRARY)
